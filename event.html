@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e3f2fd;
+      margin: 0;
+      padding: 20px;
+    }
+    .event {
+      width: 100%;
+      max-width: 800px;
+      background: white;
+      padding: 30px;
+      margin: 30px auto;
+      border-radius: 10px;
+      box-shadow:brown;
+    }
+    input, button {
+      padding: 10px;
+      width: 100%;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #2196f3;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1976d2;
+    }
+    .logout-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: red;
+      
+      padding: 10px;
+      
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #aaa;
+      text-align: center;
+    }
+    th {
+      background-color: #64b5f6;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+  <div class="event">
+    <h1>Event Management System</h1>
+    <input type="text" id="eventName" placeholder="Enter Event Name">
+    <input type="date" id="eventDate">
+    <input type="time" id="startTime">
+    <input type="time" id="endTime">
+    <input type="text" id="eventLocation" placeholder="Enter Location">
+    <button onclick="addEvent()">Add Event</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Event Name</th>
+          <th>Date</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Location</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="eventTable"></tbody>
+    </table>
+  </div>
+
+  <script>
+    if (localStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "login.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedIn");
+      window.location.href = "login.html";
+    }
+
+    function addEvent() {
+      const name = document.getElementById("eventName").value;
+      const date = document.getElementById("eventDate").value;
+      const start = document.getElementById("startTime").value;
+      const end = document.getElementById("endTime").value;
+      const location = document.getElementById("eventLocation").value;
+
+      if (!name || !date || !start || !end || !location) {
+        alert("Fill all fields!");
+        return;
+      }
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${name}</td>
+        <td>${date}</td>
+        <td>${start}</td>
+        <td>${end}</td>
+        <td>${location}</td>
+        <td><button onclick="deleteRow(this)">Delete</button></td>
+      `;
+      document.getElementById("eventTable").appendChild(row);
+
+      document.getElementById("eventName").value = "";
+      document.getElementById("eventDate").value = "";
+      document.getElementById("startTime").value = "";
+      document.getElementById("endTime").value = "";
+      document.getElementById("eventLocation").value = "";
+    }
+
+    function deleteRow(btn) {
+      btn.parentElement.parentElement.remove();
+    }
+  </script>
+</body>
+</html>
